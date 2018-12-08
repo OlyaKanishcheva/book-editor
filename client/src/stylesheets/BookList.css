@@ -1,0 +1,8 @@
+.book-list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 50px;
+  border-top: 20px solid;
+}

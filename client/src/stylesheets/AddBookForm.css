@@ -1,0 +1,14 @@
+.add-book__host {
+  padding: 10px;
+  width: 400px;
+  box-shadow: 1px 1px 10px cadetblue;
+  border: 1px solid dimgrey;
+}
+
+.add-book__input__container {
+  margin-bottom: 10px;
+}
+
+.add-book__input {
+  font-size: 20px;
+}

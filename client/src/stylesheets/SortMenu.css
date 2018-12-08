@@ -1,0 +1,26 @@
+.app__inner {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  background-color: black;
+  height: 60px;
+}
+
+.app__text {
+  font-size: 32px;
+  color: white;
+  width: 200px;
+}
+
+.sort-item {
+  cursor: pointer;
+}
+
+.sort-item:hover {
+  color: orange;
+}
+
+.sort-item-selected {
+  color: green;
+}
