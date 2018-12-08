@@ -15,7 +15,9 @@ const Book = (props, { store }) => {
     store.dispatch(editBook({
       id: props.id,
       title: props.title,
-      publicationDate: props.publicationDate
+      publicationDate: props.publicationDate,
+      pagesNumber: props.pagesNumber,
+      publisherName: props.publisherName,
     }))
   }
 
@@ -23,7 +25,9 @@ const Book = (props, { store }) => {
     <div className='book'>
       <div className='book__inner'>
         <div className='book__title'>{props.title}</div>
-        <div className='book__publication-date'>Publication date: {props.publicationDate ? props.publicationDate : '-'}</div>
+        <div className='book__publication-date'>Number of pages: {props.pagesNumber}</div>
+        <div className='book__publisher-name'>Publisher Name: {props.publisherName ? props.publisherName : '-'}</div>
+        <div className='book__publication-date'>Publication year: {props.publicationDate ? props.publicationDate : '-'}</div>
         <button className='book__remove app__button'
                 title='Remove book'
                 onClick={(e) => remove(e, props.id)}>&#10006;</button>
@@ -38,7 +42,9 @@ const Book = (props, { store }) => {
 
 Book.propTypes = {
   title: PropTypes.string.isRequired,
-  publicationDate: PropTypes.number
+  publicationDate: PropTypes.number,
+  pagesNumber: PropTypes.string.isRequired,
+  publisherName: PropTypes.string,
 }
 
 Book.contextTypes = {

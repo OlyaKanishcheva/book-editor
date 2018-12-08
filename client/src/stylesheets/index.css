@@ -13,6 +13,6 @@ code {
     monospace;
 }
 
-input[type='text'].input-error {
+input[type='text'].input-error, input[type='number'].input-error {
 	border-color: #FF2400;;
 }
