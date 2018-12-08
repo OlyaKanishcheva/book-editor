@@ -9,8 +9,19 @@
   margin-top: 20px;
 }
 
-.book__title {
+.book__title, .book__authors-title {
   font-weight: bold;
+}
+
+.book__authors-title {
+  text-align: left;
+}
+
+.book__authors-list {
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .book__remove {

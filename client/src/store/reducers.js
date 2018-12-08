@@ -18,6 +18,8 @@ export const book = (state = {}, action) => {
         publicationDate: action.publicationDate,
         pagesNumber: action.pagesNumber,
         publisherName: action.publisherName,
+        releaseDate: action.releaseDate,
+        authors: action.authors,
       }
     default:
       return state
@@ -49,6 +51,8 @@ export const editBook = (state = {}, action) => {
         publicationDate: action.publicationDate,
         pagesNumber: action.pagesNumber,
         publisherName: action.publisherName,
+        releaseDate: action.releaseDate,
+        authors: action.authors,
       }
     case C.ADD_BOOK: 
       return {}

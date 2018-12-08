@@ -1,5 +1,5 @@
 export const validTextInput = ({input, maxLength}) => {
-  if (input.value.length > maxLength) {
+  if (input.value.length > maxLength || input.value === '') {
     input.classList.add('input-error')
     return false
   } else {

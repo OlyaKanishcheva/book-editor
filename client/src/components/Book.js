@@ -4,7 +4,6 @@ import './../stylesheets/Book.css'
 import { removeBook, editBook } from './../actions/actions'
 
 const Book = (props, { store }) => {
-
   const remove = (e, id) => {
     e.preventDefault()
     store.dispatch(removeBook(id))
@@ -12,22 +11,43 @@ const Book = (props, { store }) => {
 
   const edit = (e, props) => {
     e.preventDefault()
+    console.warn(props, 'edit')
     store.dispatch(editBook({
       id: props.id,
       title: props.title,
       publicationDate: props.publicationDate,
       pagesNumber: props.pagesNumber,
       publisherName: props.publisherName,
+      releaseDate: props.releaseDate,
+      authors: props.authors,
     }))
+  }
+
+  const autorsList = () => {
+    if (props.authors) {
+      if (props.authors.length !== 0) {
+        return props.authors.map((author, i) => 
+          <div className='book__author' key={i}>
+            {`${author.name} ${author.surname}`}
+          </div> 
+      )}
+    } else {
+      return <div>No authors</div>
+    }
   }
 
   return (
     <div className='book'>
       <div className='book__inner'>
         <div className='book__title'>{props.title}</div>
+        <div className='book__authors-list'>
+          <div className='book__authors-title'>Authors:</div> 
+          {autorsList()}
+        </div>
         <div className='book__publication-date'>Number of pages: {props.pagesNumber}</div>
         <div className='book__publisher-name'>Publisher Name: {props.publisherName ? props.publisherName : '-'}</div>
         <div className='book__publication-date'>Publication year: {props.publicationDate ? props.publicationDate : '-'}</div>
+        <div className='book__release-date'>Release date: {props.releaseDate ? props.releaseDate : '-'}</div>
         <button className='book__remove app__button'
                 title='Remove book'
                 onClick={(e) => remove(e, props.id)}>&#10006;</button>
@@ -45,6 +65,8 @@ Book.propTypes = {
   publicationDate: PropTypes.number,
   pagesNumber: PropTypes.string.isRequired,
   publisherName: PropTypes.string,
+  releaseDate: PropTypes.string,
+  authors: PropTypes.array,
 }
 
 Book.contextTypes = {

@@ -16,3 +16,7 @@ code {
 input[type='text'].input-error, input[type='number'].input-error {
 	border-color: #FF2400;;
 }
+
+.inline-block {
+  display: inline-block;
+}

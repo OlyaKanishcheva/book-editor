@@ -1,6 +1,8 @@
 import './../stylesheets/AddBookForm.css'
+import './../stylesheets/inputCalendar.css'
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
+import Calendar from 'react-input-calendar'
 import { addBook } from './../actions/actions'
 import {validTextInput, validNumberInput} from './../helpers/validInput'
 
@@ -16,6 +18,7 @@ class AddBookForm extends Component {
       pagesNumber: props.editBook.pagesNumber ? props.editBook.pagesNumber : '',
       publisherName: props.editBook.publisherName ? props.editBook.publisherName : '',
       releaseDate: props.editBook.releaseDate ? props.editBook.releaseDate : '',
+      authors: props.editBook.authors ? props.editBook.authors : [{name: '', surname: ''}]
     }
   }
 
@@ -26,6 +29,7 @@ class AddBookForm extends Component {
       pagesNumber: nextProps.editBook.pagesNumber ? nextProps.editBook.pagesNumber : '',
       publisherName: nextProps.editBook.publisherName ? nextProps.editBook.publisherName : '',
       releaseDate: nextProps.editBook.releaseDate ? nextProps.editBook.releaseDate : '',
+      authors: nextProps.editBook.authors ? nextProps.editBook.authors : [{name: '', surname: ''}]
     })
   }
 
@@ -59,6 +63,7 @@ class AddBookForm extends Component {
       pagesNumber: state.pagesNumber,
       publisherName: state.publisherName,
       releaseDate: state.releaseDate,
+      authors: state.authors,
     }))
     
     refs._title.focus()
@@ -97,6 +102,55 @@ class AddBookForm extends Component {
       ...prevState,
       releaseDate: date
     }))
+  }
+
+  changeAuthorList = (value, idx, key) => {
+    const {state} = this
+    const {authors} = state
+    const nextAuthors = authors.map((author, i) => {
+      if (i === idx) {
+        return {
+          ...author,
+          [key]: value
+        }
+      }
+      return author
+    })
+
+    this.setState({
+      ...state,
+      authors: nextAuthors
+    })
+  }
+
+  addAuthor = (e) => {
+    const {state} = this
+    let {authors} = state
+    e.preventDefault()
+    authors.push({
+      name: '',
+      surname: ''
+    })
+
+    this.setState({
+      ...state,
+      authors: authors
+    })
+  }
+
+  removeAuthor = (e, idx) => {
+    const {state} = this
+    const {authors} = state
+    const nextAuthors = authors.filter((author, i) => i !== idx)
+
+    e.preventDefault()
+
+    if (nextAuthors.length === 0) return
+
+    this.setState({
+      ...state,
+      authors: nextAuthors
+    })
   }
 
   renderTitleInput = () => {
@@ -171,31 +225,77 @@ class AddBookForm extends Component {
     const {changeReleaseDate, state} = this
     const {releaseDate} = state
 
+    const props = {
+      format: 'DD/MM/YYYY',
+      computableFormat: 'DD/MM/YYYY',
+      date: releaseDate,
+      minDate: '01/01/1800',
+      maxDate: '12/10/2018',
+      onChange: (e) => changeReleaseDate(e)
+    }
+
     return (
       <div className='add-book__input__container'>
         Release date:&nbsp;
-        <input ref='_releaseDate'
-               type='date'
-               className='add-book__input'
-               value={releaseDate}
-               onChange={(e) => changeReleaseDate(e.target.value)}
-               min='1800-01-01'
-               max='2018-12-7' />
+        <div className='inline-block'>
+          <Calendar {...props}/>
+        </div>
+      </div>
+    )
+  }
+
+  renderAuthorList = () => {
+    const {changeAuthorList, addAuthor, removeAuthor, state} = this
+    const {authors} = state
+
+    return (
+      <div className='add-book__input__container'>
+        <div>List of authors: </div>
+        <div className='add-book__author__container'>
+          {authors.map((author, i) => {
+            return (
+              <div key={i} >
+                <input type='text'
+                       className='add-book__input add-book__input-author-name'
+                       value={author.name}
+                       onChange={(e) => changeAuthorList(e.target.value, i, 'name')}
+                       placeholder="Author's name..." required/>
+                <input type='text'
+                       className='add-book__input add-book__input-author-surname'
+                       value={author.surname}
+                       onChange={(e) => changeAuthorList(e.target.value, i, 'surname')}
+                       placeholder="Author's surname..." required/>
+                <button className='app__button button__remove-author'
+                        title='Remove author'
+                        onClick={(e) => removeAuthor(e, i)} >
+                        &#215;</button>
+              </div>
+            )
+          })}
+          <button className='app__button'
+                  title='Add author'
+                  onClick={(e) => addAuthor(e)} >
+                  Add author</button>
+        </div>
       </div>
     )
   }
 
   render() {
     const {submit} = this
+    console.warn(this.state, 'addBookForm')
     return (
       <div className='add-book__host'>
         <form className='add-book' onSubmit={submit}>
           {this.renderTitleInput()}
-          {this.renderPagesNumberInput()}
+          {this.renderAuthorList()}
           {this.renderPublisherNameInput()}
+          {this.renderPagesNumberInput()}
           {this.renderPublicationDateInput()}
           {this.renderReleaseDateInput()}
-          <button className='app__button'>Save</button>
+          <button className='app__button'
+                  type='submit'>
+                  Save</button>
         </form>
       </div>
     )
