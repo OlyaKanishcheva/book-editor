@@ -4,7 +4,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import Calendar from 'react-input-calendar'
 import { addBook } from './../actions/actions'
-import {validTextInput, validNumberInput} from './../helpers/validInput'
+import {validTextInput, validNumberInput, validISBNInput} from './../helpers/validInput'
 
 class AddBookForm extends Component {
 
@@ -20,6 +20,7 @@ class AddBookForm extends Component {
       releaseDate: props.editBook.releaseDate ? props.editBook.releaseDate : '',
       authors: props.editBook.authors ? props.editBook.authors : [{name: '', surname: ''}],
       image: props.editBook.image ? props.editBook.image : '',
+      ISBN: props.editBook.ISBN ? props.editBook.ISBN : '',
     }
   }
 
@@ -32,6 +33,7 @@ class AddBookForm extends Component {
       releaseDate: nextProps.editBook.releaseDate ? nextProps.editBook.releaseDate : '',
       authors: nextProps.editBook.authors ? nextProps.editBook.authors : [{name: '', surname: ''}],
       image: nextProps.editBook.image ? nextProps.editBook.image : '',
+      ISBN: nextProps.editBook.ISBN ? nextProps.editBook.ISBN : '',
     })
   }
 
@@ -72,6 +74,7 @@ class AddBookForm extends Component {
 
     if (!textInputs.every((input) => validTextInput({input: input.name, maxLength: input.maxLength}))) return
     if (!numberInputs.every((input) => validNumberInput({input: input.name, max: input.max, min: input.min}))) return
+    if (!validISBNInput({input: refs._ISBN})) return
 
     store.dispatch(addBook({
       title: state.title,
@@ -81,6 +84,7 @@ class AddBookForm extends Component {
       releaseDate: state.releaseDate,
       authors: state.authors,
       image: state.image,
+      ISBN: state.ISBN,
     }))
     
     refs._title.focus()
@@ -178,7 +182,6 @@ class AddBookForm extends Component {
       file = e.target.files[0]
       const promise = new Promise((resolve, reject) => {
         const reader = new FileReader()
-
         reader.onload = () => resolve(reader.result)
         reader.onerror = error => reject(error)
         reader.readAsDataURL(file)
@@ -195,6 +198,14 @@ class AddBookForm extends Component {
     this.setState({
       ...state,
       image: image
+    })
+  }
+
+  changeISBN = (value) => {
+    const {state} = this
+    this.setState({
+      ...state,
+      ISBN: value
     })
   }
 
@@ -351,9 +362,25 @@ class AddBookForm extends Component {
     )
   }
 
+  renderISBNInput = () => {
+    const {state, changeISBN} = this
+    const {ISBN} = state
+
+    return (
+      <div className='add-book__isbn-container'>
+        ISBN: 
+        <input ref='_ISBN'
+               type='text'
+               className='add-book__input'
+               value={ISBN}
+               onChange={(e) => changeISBN(e.target.value)}
+               placeholder='2-266-11156-6'/>
+      </div>
+    )
+  }
+
   render() {
     const {submit} = this
-    console.warn(this.state, 'addBookForm')
     return (
       <div className='add-book__host'>
         <form className='add-book' onSubmit={submit}>
@@ -361,6 +388,7 @@ class AddBookForm extends Component {
           {this.renderImageInput()}
           {this.renderAuthorList()}
           {this.renderPublisherNameInput()}
+          {this.renderISBNInput()}
           {this.renderPagesNumberInput()}
           {this.renderPublicationDateInput()}
           {this.renderReleaseDateInput()}

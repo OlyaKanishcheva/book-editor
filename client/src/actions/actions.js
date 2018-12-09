@@ -7,7 +7,7 @@ export const sortBooks = sortBy =>
     sortBy
   })
 
-export const addBook = ({title, publicationDate, pagesNumber, publisherName, releaseDate, authors, image}) =>
+export const addBook = ({title, publicationDate, pagesNumber, publisherName, releaseDate, authors, image, ISBN}) =>
   ({
     type: C.ADD_BOOK,
     id: v4(),
@@ -18,6 +18,7 @@ export const addBook = ({title, publicationDate, pagesNumber, publisherName, rel
     releaseDate,
     authors,
     image,
+    ISBN,
   })
 
 export const removeBook = (id) =>
@@ -26,7 +27,7 @@ export const removeBook = (id) =>
     id
   })
 
-export const editBook = ({id, title, publicationDate, pagesNumber, publisherName, releaseDate, authors, image}) => 
+export const editBook = ({id, title, publicationDate, pagesNumber, publisherName, releaseDate, authors, image, ISBN}) => 
   ({
     type: C.EDIT_BOOK,
     id,
@@ -37,4 +38,5 @@ export const editBook = ({id, title, publicationDate, pagesNumber, publisherName
     releaseDate,
     authors,
     image,
+    ISBN
   })

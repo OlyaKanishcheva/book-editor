@@ -20,6 +20,7 @@ const Book = (props, { store }) => {
       releaseDate: props.releaseDate,
       authors: props.authors,
       image: props.image,
+      ISBN: props.ISBN,
     }))
   }
 
@@ -47,6 +48,7 @@ const Book = (props, { store }) => {
         </div>
         <div className='book__publication-date'>Number of pages: {props.pagesNumber}</div>
         <div className='book__publisher-name'>Publisher Name: {props.publisherName ? props.publisherName : '-'}</div>
+        <div className='book__isbn'>ISBN: {props.ISBN ? props.ISBN : '-'}</div>
         <div className='book__publication-date'>Publication year: {props.publicationDate ? props.publicationDate : '-'}</div>
         <div className='book__release-date'>Release date: {props.releaseDate ? props.releaseDate : '-'}</div>
         <button className='book__remove app__button'
@@ -69,6 +71,7 @@ Book.propTypes = {
   releaseDate: PropTypes.string,
   authors: PropTypes.array,
   image: PropTypes.string,
+  ISBN: PropTypes.string,
 }
 
 Book.contextTypes = {
