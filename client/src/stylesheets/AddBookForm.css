@@ -33,3 +33,30 @@
   display: inline-block;
   vertical-align: top;
 }
+
+.add-book__image-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+.add-book__image-holder {
+  position: relative;
+}
+
+.add-book__image {
+  width: 150px;
+  height: 100px;
+  border: 1px dashed;
+}
+
+.button__remove-image {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  padding: 0;
+}

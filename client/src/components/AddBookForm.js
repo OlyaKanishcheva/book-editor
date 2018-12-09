@@ -18,7 +18,8 @@ class AddBookForm extends Component {
       pagesNumber: props.editBook.pagesNumber ? props.editBook.pagesNumber : '',
       publisherName: props.editBook.publisherName ? props.editBook.publisherName : '',
       releaseDate: props.editBook.releaseDate ? props.editBook.releaseDate : '',
-      authors: props.editBook.authors ? props.editBook.authors : [{name: '', surname: ''}]
+      authors: props.editBook.authors ? props.editBook.authors : [{name: '', surname: ''}],
+      image: props.editBook.image ? props.editBook.image : '',
     }
   }
 
@@ -29,13 +30,26 @@ class AddBookForm extends Component {
       pagesNumber: nextProps.editBook.pagesNumber ? nextProps.editBook.pagesNumber : '',
       publisherName: nextProps.editBook.publisherName ? nextProps.editBook.publisherName : '',
       releaseDate: nextProps.editBook.releaseDate ? nextProps.editBook.releaseDate : '',
-      authors: nextProps.editBook.authors ? nextProps.editBook.authors : [{name: '', surname: ''}]
+      authors: nextProps.editBook.authors ? nextProps.editBook.authors : [{name: '', surname: ''}],
+      image: nextProps.editBook.image ? nextProps.editBook.image : '',
     })
   }
 
   submit = (e) => {
     e.preventDefault()
     const {state, store, refs} = this
+    const namesInputs = state.authors.map((a, i) => {
+      let o = {}
+      o.name = refs[`_author_name_${i}`]
+      o.maxLength = 20
+      return o
+    })
+    const surnamesInputs = state.authors.map((a, i) => {
+      let o = {}
+      o.name = refs[`_author_surname_${i}`]
+      o.maxLength = 20
+      return o
+    })
     const textInputs = [
       {
         name: refs._title,
@@ -44,7 +58,9 @@ class AddBookForm extends Component {
       {
         name: refs._publisherName,
         maxLength: 30,
-      }
+      },
+      ...namesInputs,
+      ...surnamesInputs
     ]
     const numberInputs = [
       {
@@ -64,6 +80,7 @@ class AddBookForm extends Component {
       publisherName: state.publisherName,
       releaseDate: state.releaseDate,
       authors: state.authors,
+      image: state.image,
     }))
     
     refs._title.focus()
@@ -153,6 +170,34 @@ class AddBookForm extends Component {
     })
   }
 
+  changeImage = async (e, mode) => {
+    const {state} = this
+    let file, image
+
+    if (mode === 'add') {
+      file = e.target.files[0]
+      const promise = new Promise((resolve, reject) => {
+        const reader = new FileReader()
+
+        reader.onload = () => resolve(reader.result)
+        reader.onerror = error => reject(error)
+        reader.readAsDataURL(file)
+      })
+
+      await promise.then(base64 => {
+        image = base64
+        console.debug('file stored', base64)
+      })
+    } else {
+      image = ''
+    }
+    
+    this.setState({
+      ...state,
+      image: image
+    })
+  }
+
   renderTitleInput = () => {
     const {changeTitle, state} = this
     const {title} = state
@@ -216,7 +261,7 @@ class AddBookForm extends Component {
                className='add-book__input'
                value={publisherName}
                onChange={(e) => changePublisherName(e.target.value)}
-               placeholder='Publisher name...' required/>
+               placeholder='Publisher name...'/>
       </div>
     )
   }
@@ -255,12 +300,14 @@ class AddBookForm extends Component {
           {authors.map((author, i) => {
             return (
               <div key={i} >
-                <input type='text'
+                <input ref={`_author_name_${i}`}
+                       type='text'
                        className='add-book__input add-book__input-author-name'
                        value={author.name}
                        onChange={(e) => changeAuthorList(e.target.value, i, 'name')}
                        placeholder="Author's name..." required/>
-                <input type='text'
+                <input ref={`_author_surname_${i}`}
+                       type='text'
                        className='add-book__input add-book__input-author-surname'
                        value={author.surname}
                        onChange={(e) => changeAuthorList(e.target.value, i, 'surname')}
@@ -281,6 +328,29 @@ class AddBookForm extends Component {
     )
   }
 
+  renderImageInput = () => {
+    const {state, changeImage} = this
+    const {image} = state
+
+    return (
+      <div className='add-book__image-input-container'>
+        <div className='add-book__image-holder'>
+          <div className='add-book__image'
+               style={{backgroundImage: image ? `url(${image})` : ''}} />
+          <button className='app__button button__remove-image'
+                  title='Remove image'
+                  type='button'
+                  onClick={(e) => changeImage(e, 'remove')} >
+                  &#215;</button>
+        </div>
+        <input ref='_image'
+               type='file' 
+               onChange={(e) => changeImage(e, 'add')}>
+        </input>
+      </div>
+    )
+  }
+
   render() {
     const {submit} = this
     console.warn(this.state, 'addBookForm')
@@ -288,6 +358,7 @@ class AddBookForm extends Component {
       <div className='add-book__host'>
         <form className='add-book' onSubmit={submit}>
           {this.renderTitleInput()}
+          {this.renderImageInput()}
           {this.renderAuthorList()}
           {this.renderPublisherNameInput()}
           {this.renderPagesNumberInput()}

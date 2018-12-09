@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-// import logo from './../stylesheets/logo.svg';
 import './../stylesheets/App.css'
 import SortMenu from './SortMenu'
 import BookList from './BookList'
@@ -11,7 +10,6 @@ class App extends Component {
   constructor(props) {
     super()
     this.props = props
-    // <img src={logo} className="App-logo" alt="logo" />
   }
 
   getChildContext() {
@@ -36,8 +34,10 @@ class App extends Component {
     return (
       <div className='app'>
         <SortMenu />
-        <AddBookForm editBook={editBook}/>
-        <BookList books={sortedBooks}/>
+        <div className='app__main'>
+          <AddBookForm editBook={editBook}/>
+          <BookList books={sortedBooks}/>
+        </div>
       </div>
     )
   }

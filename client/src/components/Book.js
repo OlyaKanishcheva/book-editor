@@ -11,7 +11,6 @@ const Book = (props, { store }) => {
 
   const edit = (e, props) => {
     e.preventDefault()
-    console.warn(props, 'edit')
     store.dispatch(editBook({
       id: props.id,
       title: props.title,
@@ -20,6 +19,7 @@ const Book = (props, { store }) => {
       publisherName: props.publisherName,
       releaseDate: props.releaseDate,
       authors: props.authors,
+      image: props.image,
     }))
   }
 
@@ -40,6 +40,7 @@ const Book = (props, { store }) => {
     <div className='book'>
       <div className='book__inner'>
         <div className='book__title'>{props.title}</div>
+        <div className='book__image' style={{backgroundImage: `url(${props.image})`}}></div>
         <div className='book__authors-list'>
           <div className='book__authors-title'>Authors:</div> 
           {autorsList()}
@@ -67,6 +68,7 @@ Book.propTypes = {
   publisherName: PropTypes.string,
   releaseDate: PropTypes.string,
   authors: PropTypes.array,
+  image: PropTypes.string,
 }
 
 Book.contextTypes = {

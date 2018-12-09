@@ -20,6 +20,7 @@ export const book = (state = {}, action) => {
         publisherName: action.publisherName,
         releaseDate: action.releaseDate,
         authors: action.authors,
+        image: action.image,
       }
     default:
       return state
@@ -53,6 +54,7 @@ export const editBook = (state = {}, action) => {
         publisherName: action.publisherName,
         releaseDate: action.releaseDate,
         authors: action.authors,
+        image: action.image,
       }
     case C.ADD_BOOK: 
       return {}
