@@ -30,7 +30,7 @@ class App extends Component {
 
   render() {
     const {sort, books, editBook} = this.props.store.getState()
-    const sortedBooks = sortBooks(books, sort)      
+    const sortedBooks = sortBooks(books, sort)     
     return (
       <div className='app'>
         <SortMenu />
